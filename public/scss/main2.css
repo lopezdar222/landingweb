@@ -1,0 +1,23 @@
+html, body {
+  height: 100%;
+}
+
+.slots {
+  width: 265.5px;
+  height: 206.5px;
+  border: 1px solid black;
+  border-radius: 11px;
+  padding: 17.7px;
+  display: flex;
+  justify-content: space-between;
+}
+.slots .reel {
+  border: 1px solid black;
+  width: 59px;
+  height: 177px;
+  background-image: url(../img/img1.png);
+  background-repeat: repeat-y;
+  background-position: 0 0;
+}
+
+/*# sourceMappingURL=main2.css.map */

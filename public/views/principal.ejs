@@ -1,0 +1,59 @@
+<%if (message === 'ok') {%>
+    <span class="ml-2"><%= title %> <%= datos.cliente_usuario %></span>
+    <div class="w-full">				
+        <div class="game">
+            <div class="slots">
+                <div class="reel"></div>
+                <div class="reel"></div>
+                <div class="reel"></div>
+            </div>
+        </div>
+        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <a class="w-full mb-3" href="<%= datos.url_juegos %>">
+                <span class="ml-2">Jugá...</span>
+            </a>
+        </button>
+        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=cargar_fichas');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Cargar Fichas</span>
+        </button>
+        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=retirar_fichas');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Retirar Fichas</span>
+        </button>
+        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=panel');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Panel de Solicitudes</span>
+        </button>
+        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=cambiar_contraseña');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Cambiar Contraseña</span>
+        </button>
+        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=desbloquear_usuario');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Desbloquear Usuario</span>
+        </button>
+        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=chat');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Chatear con tu Agente</span>
+        </button>
+        <%if (datos.contacto_whatsapp != '') {%>
+        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <a href="https://wa.me/<%= datos.contacto_whatsapp %>" target="_blank">
+                <span class="ml-2">Contacto Whatsapp</span>
+            </a>
+        </button>
+        <%} %>
+        <%if (datos.contacto_telegram != '') {%>
+        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <a href="https://<%= datos.contacto_telegram %>" target="_blank">
+                <span class="ml-2">Contacto Telegram</span>
+            </a>
+        </button>
+        <%} %>
+        <button onclick="cerrar_Sesion(<%= datos.id_cliente %>, '<%= id_token %>');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Cerrar Sesión</span>
+        </button>
+    </div>
+<%} else {%>
+    <span class="ml-2"><%= message %> </span>
+    <div class="w-full">
+        <button onclick="cerrar_Sesion_Token_Invalido()" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2"><<-- Volver al Inicio</span>
+        </button> 
+    </div>    
+<%} %>
