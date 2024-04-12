@@ -1,6 +1,10 @@
 <%if (message === 'ok') {%>
-    <span class="ml-2"><%= title %> <%= datos.cliente_usuario %></span>
-    <div class="w-full">				
+    <div class="w-full">			
+        <div class="mb-4 text-center text-sm">
+            <!--p class="text-custom-yellow font-bold"><%= title %> <%= datos.cliente_usuario %></p-->
+            <h2 class="text-lg font-bold md:text-xl col-span-3 md:col-span-2 flex justify-center items-center text-center"><%= title %> <%= datos.cliente_usuario %></h2>
+            <!--span class="ml-2"><%= title %> <%= datos.cliente_usuario %></span-->
+        </div>	
         <div class="game">
             <div class="slots">
                 <div class="reel"></div>

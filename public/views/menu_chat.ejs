@@ -1,5 +1,6 @@
 <%if (message === 'ok') {%>
-    <span class="ml-2"><%= title %> <%= datos.cliente_usuario %></span>
+    <h2 class="text-lg font-bold md:text-xl col-span-3 md:col-span-2 flex justify-center items-center text-center"><%= title %> <%= datos.cliente_usuario %></h2>
+    <!--span class="ml-2"><%= title %> <%= datos.cliente_usuario %></span-->
     <div class="w-full">
         <button onclick="cargarContenido('/principal?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
             <span class="ml-2"><<-- Volver</span>

@@ -1,17 +1,17 @@
 const axios = require('axios');
 
-async function contraseña(nombre, variables_utiles) {
+async function contraseña(nombre, contra, agent_user, agent_pass ) {
     try {
         const url = `https://wallet-uat.emaraplay.com/bot/user/password`;
         // Datos que deseas enviar en la petición POST
         const data = {
             agent : {
-                username : variables_utiles.ADMIN,
-                password : variables_utiles.ADMIN_PASS
+                username : agent_user,
+                password : agent_pass
             },
             user : {
                 username : nombre,
-                newPassword : 'cambiar123'
+                newPassword : contra
             }
         };
 

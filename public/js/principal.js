@@ -5,6 +5,10 @@ let datos = [];
 let datosOriginales = [];
 let paginacionActual = 1;
 let cerrando_sesion = 0;
+let cambiando_contraseña = 0;
+let desbloqueando_usuario = 0;
+let cargando_fichas = 0;
+let retirando_fichas = 0;
 
 // Función para cargar el contenido dinámico desde el servidor
 function cargarContenido(url) {
@@ -231,4 +235,246 @@ const cerrar_Sesion = async (id_cliente, id_token) => {
 
 const cerrar_Sesion_Token_Invalido = async () => {
       window.location.href = `/`;
+};
+
+const cambiarContraseña = async (id_cliente, id_token) => {
+  if (cambiando_contraseña == 1) {
+      alert('Por Favor Aguardar. Se está Procesando la Solicitud.');
+      return;
+  }
+  cambiando_contraseña = 1;
+  let mgsResultado = '';
+  let mgsResultadoMensaje = '';
+  let url = '';
+  const msgUsuario = document.getElementById('msgUsuario');
+  const contra1 = document.getElementById('contra1');
+  const contra2 = document.getElementById('contra2');
+
+  if (contra1.value == '') {
+      msgUsuario.innerHTML = 'Por favor, completar Contraseña!';
+      cambiando_contraseña = 0;
+      return;
+  }
+  if (contra2.value == '') {
+      msgUsuario.innerHTML = 'Por favor, completar Validación de Contraseña!';
+      cambiando_contraseña = 0;
+      return;
+  }
+  if (contra1.value != contra2.value) {
+      msgUsuario.innerHTML = 'Los valores ingresados no son iguales!';
+      cambiando_contraseña = 0;
+      return;
+  }
+  try {
+        const contrasena = contra1.value;
+        const response = await fetch(`/cambiar_contrasena`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'},
+          body: JSON.stringify({  id_cliente, 
+                                  id_token, 
+                                  contrasena })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          mgsResultado = data.resultado;
+          mgsResultadoMensaje = data.mensaje;
+          //alert(mgsResultadoMensaje);
+          cambiando_contraseña = 0;
+          url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
+          document.getElementById('modal-contenido').innerHTML = '';
+          cargarContenido(url);
+        } else {
+          cambiando_contraseña = 0;
+          msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+        }
+  } catch (error) {
+      cambiando_contraseña = 0;
+      msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+  }
+};
+
+const desbloquearUsuario = async (id_cliente, id_token) => {
+  if (desbloqueando_usuario == 1) {
+      alert('Por Favor Aguardar. Se está Procesando la Solicitud.');
+      return;
+  }
+  desbloqueando_usuario = 1;
+  const msgUsuario = document.getElementById('msgUsuario');
+
+  try {
+        const response = await fetch(`/desbloquear_usuario`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'},
+          body: JSON.stringify({  id_cliente, 
+                                  id_token })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          msgUsuario.innerHTML = data.mensaje;
+        } else {
+          msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+        }
+        cambiando_contraseña = 0;
+  } catch (error) {
+      cambiando_contraseña = 0;
+      msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+  }
+};
+
+const cargarFichas = async (id_cliente, id_token, id_cuenta_bancaria, minimo_carga, bono_carga_1, bono_carga_perpetua, cargas) => {
+  if (cargando_fichas == 1) {
+      alert('Por Favor Aguardar. Se está Procesando la Solicitud.');
+      return;
+  }
+  cargando_fichas = 1;
+  let mgsResultado = '';
+  let mgsResultadoMensaje = '';
+  let url = '';
+  let bono = 0;
+  const msgUsuario = document.getElementById('msgUsuario');
+  const titular = document.getElementById('titular');
+  const importe = document.getElementById('importe');
+  // Expresión regular para verificar si es un número entero
+  var patron_nro_entero = /^\d+$/;
+
+  if (importe.value == '') {
+    msgUsuario.innerHTML = 'Por favor, completar el Importe!';
+    cargando_fichas = 0;
+    return;
+  }
+  // Verificar si el valor coincide con el patrón
+  if (!patron_nro_entero.test(importe.value)) {
+    msgUsuario.innerHTML = 'Por favor, Ingresar Sin Centavos!';
+    cargando_fichas = 0;
+    return;
+  }
+  // Verificar si el valor supera el mínimo de carga
+  if (importe.value < minimo_carga) {
+    msgUsuario.innerHTML = 'Por favor, Ingresar un Importe Mayor o igual al Mínimo de Carga!';
+    cargando_fichas = 0;
+    return;
+  }
+  if (titular.value == '') {
+    msgUsuario.innerHTML = 'Por favor, completar el Titular!';
+    cargando_fichas = 0;
+    return;
+  }
+  if (cargas == 0) {
+    if (bono_carga_1 > 0) {
+      bono = Math.ceil(Number(importe.value) * bono_carga_1 / 100);
+    }
+  } else {
+    if (bono_carga_perpetua > 0) {
+      bono = Math.ceil(Number(importe.value) * bono_carga_perpetua / 100);
+    }
+  }
+  try {
+        const solicitud_titular = titular.value;
+        const solicitud_importe = importe.value;
+        const response = await fetch(`/cargar_fichas`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'},
+          body: JSON.stringify({  id_cliente, 
+                                  id_token, 
+                                  solicitud_titular,
+                                  solicitud_importe,
+                                  id_cuenta_bancaria,
+                                  bono })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          mgsResultado = data.resultado;
+          mgsResultadoMensaje = data.mensaje;
+          //alert(mgsResultadoMensaje);
+          cargando_fichas = 0;
+          url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
+          document.getElementById('modal-contenido').innerHTML = '';
+          cargarContenido(url);
+        } else {
+          cargando_fichas = 0;
+          msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+        }
+  } catch (error) {
+      cargando_fichas = 0;
+      msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+  }
+};
+
+const retirarFichas = async (id_cliente, id_token, minimo_retiro) => {
+  if (retirando_fichas == 1) {
+      alert('Por Favor Aguardar. Se está Procesando la Solicitud.');
+      return;
+  }
+  retirando_fichas = 1;
+  let mgsResultado = '';
+  let mgsResultadoMensaje = '';
+  let url = '';
+  const msgUsuario = document.getElementById('msgUsuario');
+  const titular = document.getElementById('titular');
+  const importe = document.getElementById('importe');
+  const cbu = document.getElementById('cbu');
+  // Expresión regular para verificar si es un número entero
+  var patron_nro_entero = /^\d+$/;
+
+  if (importe.value == '') {
+    msgUsuario.innerHTML = 'Por favor, completar el Importe!';
+    retirando_fichas = 0;
+    return;
+  }
+  // Verificar si el valor coincide con el patrón
+  if (!patron_nro_entero.test(importe.value)) {
+    msgUsuario.innerHTML = 'Por favor, Ingresar Sin Centavos!';
+    retirando_fichas = 0;
+    return;
+  }
+  // Verificar si el valor supera el mínimo de carga
+  if (importe.value < minimo_retiro) {
+    msgUsuario.innerHTML = 'Por favor, Ingresar un Importe Mayor o igual al Mínimo de Retiro!';
+    retirando_fichas = 0;
+    return;
+  }
+  if (titular.value == '') {
+    msgUsuario.innerHTML = 'Por favor, completar el Titular!';
+    retirando_fichas = 0;
+    return;
+  }
+  if (cbu.value == '') {
+    msgUsuario.innerHTML = 'Por favor, completar el CBU!';
+    retirando_fichas = 0;
+    return;
+  }
+  try {
+        const solicitud_titular = titular.value;
+        const solicitud_importe = importe.value;
+        const solicitud_cbu = cbu.value;
+        const response = await fetch(`/retirar_fichas`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'},
+          body: JSON.stringify({  id_cliente, 
+                                  id_token, 
+                                  solicitud_titular,
+                                  solicitud_importe,
+                                  solicitud_cbu })
+        });
+        if (response.ok) {
+          const data = await response.json();
+          mgsResultado = data.resultado;
+          mgsResultadoMensaje = data.mensaje;
+          //alert(mgsResultadoMensaje);
+          retirando_fichas = 0;
+          url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
+          document.getElementById('modal-contenido').innerHTML = '';
+          cargarContenido(url);
+        } else {
+          retirando_fichas = 0;
+          msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+        }
+  } catch (error) {
+    retirando_fichas = 0;
+      msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
+  }
 };
