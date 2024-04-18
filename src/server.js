@@ -329,7 +329,7 @@ app.get('/menu', async (req, res) => {
                             `estado, ` +
                             `id_accion, ` +
                             `accion, ` +
-                            `TO_CHAR(fecha_hora_operacion, 'DD/MM/YYYY HHMMSS') as fecha_hora_operacion,` +
+                            `TO_CHAR(fecha_hora_operacion, 'YYYY/MM/DD HH24:MI:SS') as fecha_hora_operacion,` +
                             `retiro_importe, ` +
                             `retiro_cbu, ` +
                             `retiro_titular, ` +
