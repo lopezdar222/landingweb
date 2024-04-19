@@ -51,6 +51,9 @@ function cargarContenido(url) {
               mostrarDatosEnTabla(tabla);
               crearBotonesPaginacion(tabla, paginacion);
         }
+        if (url.indexOf('menu=chat') !== -1 ) {
+          scrollToBottom();
+        }
       })
       .catch(error => {
         console.error('Error:', error);
@@ -478,3 +481,8 @@ const retirarFichas = async (id_cliente, id_token, minimo_retiro) => {
       msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
   }
 };
+
+function scrollToBottom() {
+    const chatMessages = document.getElementById("chat-messages");
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
