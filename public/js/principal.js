@@ -486,3 +486,24 @@ function scrollToBottom() {
     const chatMessages = document.getElementById("chat-messages");
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
+
+function cargarContenidoChats(id_cliente, mensaje) {
+  if (mensaje != '') 
+  {
+      const mensaje_envio = mensaje.replace('/','<<');
+      const url = `/menu_chat_detalle?id_cliente=${encodeURIComponent(id_cliente)}&mensaje=${encodeURIComponent(mensaje_envio)}`;
+      fetch(url)
+      .then(response => response.text())
+      .then(data => {
+          const chatMessages = document.getElementById("chat-messages");
+          chatMessages.innerHTML = data;
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          const texto_mensaje = document.getElementById('message-input');
+          texto_mensaje.value = '';
+          texto_mensaje.focus();
+      })
+      .catch(error => {
+          console.error('Error:', error);
+      });
+  }
+}

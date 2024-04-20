@@ -245,6 +245,42 @@ app.post('/desbloquear_usuario', async (req, res) => {
     }
 });
 
+app.get('/menu_chat_detalle', async (req, res) => {
+    try 
+    {
+        // Obtener los parámetros de la URL
+        const id_cliente = parseInt(req.query.id_cliente, 10);
+        const mensaje_cliente = req.query.mensaje.replace('<<','/');
+
+        let query = `select id_cliente_chat,` +
+                                `id_cliente, ` +
+                                `mensaje, ` +
+                                `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') as fecha_mensaje,` +
+                                `TO_CHAR(fecha_hora_creacion, 'HH24:MI') as horario_mensaje, ` +
+                                `enviado_cliente, ` +
+                                `visto_cliente, ` +
+                                `visto_operador, ` +
+                                `id_usuario, ` +
+                                `usuario, ` +
+                                `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') = LAG(TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY')) ` +
+                                `OVER (ORDER BY id_cliente_chat) AS misma_fecha `;
+        
+        if (mensaje_cliente == '') {        
+            query = query + `from Obtener_Cliente_Chat(${id_cliente}, true);`;
+        } else {        
+            query = query + `from Insertar_Cliente_Chat(${id_cliente}, true, '${mensaje_cliente}', 1);`;
+        }
+        //console.log(query);
+        const result = await db.handlerSQL(query);
+        const datos = result.rows;
+        //console.log(datos);
+        res.render('menu_chat_detalle', { message: 'ok', datos : datos });
+    }
+    catch (error) {
+        res.render('menu_chat_detalle', { message: 'sin mensajes' });
+    }
+});
+
 app.get('/menu', async (req, res) => {
     const menu_render = 'menu_' + req.query.menu;
     try {
@@ -339,7 +375,7 @@ app.get('/menu', async (req, res) => {
                             `carga_bono ` +
                             `from v_Clientes_Operaciones ` +
                             `where id_cliente = ${id_cliente} ` +
-                            `and id_accion in (1, 2) ` +
+                            `and id_accion in (1, 2, 5, 6) ` +
                             `order by id_operacion desc`;
 
             result2 = await db.handlerSQL(query2);
@@ -352,12 +388,39 @@ app.get('/menu', async (req, res) => {
                                     datos2 : datos2 });
             return;
         } 
+        else if (req.query.menu == 'chat') 
+        {   
+            
+            titulo_menu = 'Chatear con el Agente';
+            
+            query2 = `select id_cliente_chat,` +
+                                `id_cliente, ` +
+                                `mensaje, ` +
+                                `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') as fecha_mensaje,` +
+                                `TO_CHAR(fecha_hora_creacion, 'HH24:MI') as horario_mensaje, ` +
+                                `enviado_cliente, ` +
+                                `visto_cliente, ` +
+                                `visto_operador, ` +
+                                `id_usuario, ` +
+                                `usuario, ` +
+                                `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') = LAG(TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY')) ` +
+                                `OVER (ORDER BY id_cliente_chat) AS misma_fecha ` +
+                        `from Obtener_Cliente_Chat(${id_cliente}, true);`;
+
+            result2 = await db.handlerSQL(query2);
+            datos2 = result2.rows;
+
+            res.render(menu_render, { message: 'ok', 
+                                    title: titulo_menu, 
+                                    id_token : id_token, 
+                                    id_cliente : id_cliente,
+                                    datos : datos,
+                                    datos2 : datos2});
+            return;
+        } 
         else 
         {
-            if (req.query.menu == 'chat') 
-            {    
-                titulo_menu = 'Chatear con tu Agente';
-            } else if (req.query.menu == 'cambiar_contraseña') 
+            if (req.query.menu == 'cambiar_contraseña') 
             {   
                 titulo_menu = 'Cambiar Contraseña';
             } else if (req.query.menu == 'desbloquear_usuario') 

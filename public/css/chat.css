@@ -18,10 +18,12 @@
 
 .other {
     color: #666;
+    text-align: left;
 }
 
 .self {
     color: #007bff;
+    text-align: right;
 }
 
 .message-content {
@@ -47,6 +49,8 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-right: 5px;
+    color: #007bff;
+    text-align: left;
 }
 
 #send-button {
