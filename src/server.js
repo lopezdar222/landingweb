@@ -69,39 +69,62 @@ app.get('/agentes_ayuda', async (req, res) => {
 // Páginas Generales
 app.post('/login', async (req, res) => {
     try {    
-        const { username, password, ipAddress } = req.body;
-        const url = `https://panelesbot.com/api/loginweb`;
-        // Datos que deseas enviar en la petición POST
-        const data = {
-            agent : {
-                username : 'takitaki',
-                password : 'Juanambar18.'
-            },
-            user : {
-                username : username,
-                password : password,
-                plataforma : 3,
-                ipAddress : ipAddress
-            }
-        };
+        const { username, password, ipAddress, id_plataforma } = req.body;
+        let url = '';
+        let data = {};
+        if (id_plataforma == 1) {
+            url = `https://wallet-uat.emaraplay.com/bot/user/login`;
+            // Datos que deseas enviar en la petición POST
+            data = {
+                agent : {
+                    username : 'takitaki',
+                    password : 'Juanambar18.'
+                },
+                user : {
+                    username : username,
+                    password : password,
+                }
+            };
+        } else {
+            const id_bot = 3;
+            url = `https://panelesbot.com/api/loginweb`;
+            // Datos que deseas enviar en la petición POST
+            data = {
+                user : {
+                    username : username,
+                    id_bot : id_bot
+                }
+            };
+        }
         // Configuración de la petición
         const config = {
             method: 'post',
             url: url,
             data: data
-          };
+            };
         // Realizar la petición POST
         const response = await axios(config);
-        
-        if (response.data.data.error == false) {
+
+        if (response.data.error == false) {
             const id_token = generarToken(30);
-            const agente = response.data.data.data.agent;
-            const monto = response.data.data.data.user.balance.amount;
-            const moneda = response.data.data.data.user.balance.currency;
+            const agente = response.data.data.agent;
+            const monto = response.data.data.user.balance.amount;
+            const moneda = response.data.data.user.balance.currency;
             const consulta2 = `select id_cliente from Confirmar_Sesion_Cliente('${agente}', '${username}', '${password}', '${id_token}', '${ipAddress}', ${monto}, '${moneda}')`;
             const result = await db.handlerSQL(consulta2);
             const id_cliente = result.rows[0].id_cliente;
-            res.status(201).json({ message: 'ok', id_token : id_token, id_cliente : id_cliente});
+            if (id_cliente > 0) {
+                res.status(201).json({ message: 'ok', id_token : id_token, id_cliente : id_cliente});
+            } else {
+                if (id_cliente == -1) {
+                    res.status(201).json({ message: 'Usuario Bloqueado. Consultar al Agente.', id_cliente : id_cliente});
+                } else if (id_cliente == -2) {
+                    res.status(201).json({ message: 'Conexión de Orígen Bloqueada. Consultar al Agente.', id_cliente : id_cliente});
+                } else {
+                    res.status(201).json({ message: 'No es posible iniciar sesión. Consultar al Agente.', id_cliente : id_cliente});
+                }
+                
+            }
         } else {
             res.status(401).json({ message: 'Usuario y/o Contrasñea Incorrectos' });
             return;

@@ -9,6 +9,7 @@ let cambiando_contraseña = 0;
 let desbloqueando_usuario = 0;
 let cargando_fichas = 0;
 let retirando_fichas = 0;
+let ws = null;
 
 // Función para cargar el contenido dinámico desde el servidor
 function cargarContenido(url) {
@@ -79,25 +80,20 @@ document.addEventListener('DOMContentLoaded', async (req, res) => {
         if (data.message === 'token invalido') {
             window.location.href = `../index.html`;
         } else {
-            /*usuario = data.usuario;
-            monto = data.monto;
-            moneda = data.moneda;
-            const usuario_usuario = document.getElementById('usuario_usuario');
-            const usuario_monto = document.getElementById('usuario_monto');
-            const usuario_moneda = document.getElementById('usuario_moneda');
+            //Inicializar cliente Websocket********************************/
+            ws = new WebSocket('ws://paneleslanding.com:8080');
 
-            usuario_usuario.innerHTML = usuario;
-            usuario_monto.innerHTML = monto;
-            usuario_moneda.innerHTML = moneda;
-    
-            const logout = document.getElementById('logout');
-            logout.addEventListener('click', function(event) {
-                event.preventDefault();
-                url_ultima_invocada = `${this.getAttribute('href')}?id_cliente=${encodeURIComponent(id_cliente)}id_token=${encodeURIComponent(id_token)}`;
-                fetch(url_ultima_invocada);
-                window.location.href = `/`;
-            });*/
-
+            ws.onopen = function(event) {
+                enviarMensaje('', id_cliente);
+            };
+            
+            // Evento cuando se recibe un mensaje del servidor
+            ws.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+                alert(data.alerta);
+                // Aquí puedes manipular el mensaje recibido, por ejemplo, mostrarlo en la página
+            };
+            /******************************************************************/
             // Carga el menú de actividad de clientes al inicio:
             url_ultima_invocada = `/principal?id_cliente=${encodeURIComponent(id_cliente)}&id_token=${encodeURIComponent(id_token)}`;
             cargarContenido(url_ultima_invocada);
@@ -106,6 +102,18 @@ document.addEventListener('DOMContentLoaded', async (req, res) => {
         window.location.href = `../index.html`;
     }
 });
+//Inicializar cliente Websocket********************************/
+
+function enviarMensaje(mensaje, id_cliente) {
+  const message = { 
+              es_cliente: 1,
+              ws_cliente: id_cliente,
+              id_cliente : id_cliente,
+              alerta : mensaje
+  };
+  ws.send(JSON.stringify(message));
+}
+/******************************************************************/
 
 function cargarContenidoModal(url) {
   fetch(url)
