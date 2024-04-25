@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async (req, res) => {
             window.location.href = `../index.html`;
         } else {
             //Inicializar cliente Websocket********************************/
-            ws = new WebSocket('ws://paneleslanding.com:8080');
+            ws = new WebSocket('wss://paneleslanding.com:8080');
 
             ws.onopen = function(event) {
                 enviarMensaje('', id_cliente);
@@ -90,7 +90,11 @@ document.addEventListener('DOMContentLoaded', async (req, res) => {
             // Evento cuando se recibe un mensaje del servidor
             ws.onmessage = function(event) {
                 const data = JSON.parse(event.data);
-                alert(data.alerta);
+                //alert(`Alerta = ${data.alerta}`);
+                if (data.alerta == 'chat') { 
+                  //alert('Actualizar Chats');
+                  cargarContenidoChats(id_cliente, '', true);
+                }
                 // Aquí puedes manipular el mensaje recibido, por ejemplo, mostrarlo en la página
             };
             /******************************************************************/
@@ -140,8 +144,6 @@ function abrirModal(opcion = 0, par1 = '', par2 = '', par3 = '') {
       case 1:
           id_sesion_bot = par1; 
           numero_telefono = par2; 
-          //console.log('Sesiones Bot');
-          //console.log('Id sesion: ' + id_sesion_bot);
           url = `/sesiones_bots_cerrar?id_sesion_bot=${encodeURIComponent(id_sesion_bot)}&numero_telefono=${encodeURIComponent(numero_telefono)}`;
           cargarContenidoModal(url);
           break;
@@ -495,23 +497,32 @@ function scrollToBottom() {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function cargarContenidoChats(id_cliente, mensaje) {
-  if (mensaje != '') 
+function cargarContenidoChats(id_cliente, mensaje, alerta) {
+  if ((mensaje != '' || alerta) && document.getElementById("chat-messages")) 
   {
-      const mensaje_envio = mensaje.replace('/','<<');
-      const url = `/menu_chat_detalle?id_cliente=${encodeURIComponent(id_cliente)}&mensaje=${encodeURIComponent(mensaje_envio)}`;
-      fetch(url)
-      .then(response => response.text())
-      .then(data => {
-          const chatMessages = document.getElementById("chat-messages");
-          chatMessages.innerHTML = data;
-          chatMessages.scrollTop = chatMessages.scrollHeight;
+    let mensaje_envio = mensaje;
+    if (alerta) {
+      mensaje_envio = '';   
+    } else {
+      mensaje_envio = mensaje_envio.replace('/','<<');
+    }
+    const url = `/menu_chat_detalle?id_cliente=${encodeURIComponent(id_cliente)}&mensaje=${encodeURIComponent(mensaje_envio)}`;
+    fetch(url)
+    .then(response => response.text())
+    .then(data => {
+        const chatMessages = document.getElementById("chat-messages");
+        chatMessages.innerHTML = data;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        if (!alerta) {
           const texto_mensaje = document.getElementById('message-input');
           texto_mensaje.value = '';
           texto_mensaje.focus();
-      })
-      .catch(error => {
-          console.error('Error:', error);
-      });
+          enviarMensaje('chat', id_cliente);
+        };
+    })
+    //.then(enviarMensaje('chat', id_cliente))
+    .catch(error => {
+        console.error('Error:', error);
+    });
   }
 }
