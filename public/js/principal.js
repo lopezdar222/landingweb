@@ -55,6 +55,7 @@ function cargarContenido(url) {
         if (url.indexOf('menu=chat') !== -1 ) {
           scrollToBottom();
         }
+        url_ultima_invocada = url;
       })
       .catch(error => {
         console.error('Error:', error);
@@ -90,14 +91,27 @@ document.addEventListener('DOMContentLoaded', async (req, res) => {
             // Evento cuando se recibe un mensaje del servidor
             ws.onmessage = function(event) {
                 const data = JSON.parse(event.data);
+                let ind = 0;
                 //alert(`Alerta = ${data.alerta}`);
                 if (data.alerta == 'chat') { 
                   //alert('Actualizar Chats');
+                  ind = url_ultima_invocada.indexOf('menu=chat');
                   cargarContenidoChats(id_cliente, '', true);
+                  if (ind < 0)
+                  {
+                    alert(data.alerta);
+                    alertaSistemaOperativo(data.alerta);
+                  }
                 } else {
-                  alert(data.alerta);
+                  ind = url_ultima_invocada.indexOf('menu=panel');
+                  if (ind < 0)
+                  {
+                    alert(data.alerta);
+                    alertaSistemaOperativo(data.alerta);
+                  } else {
+                    cargarContenido(url_ultima_invocada);
+                  }
                 }
-                alertaSistemaOperativo(data.alerta);
             };
             /******************************************************************/
             // Carga el menú de actividad de clientes al inicio:
