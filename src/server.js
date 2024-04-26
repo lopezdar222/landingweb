@@ -344,7 +344,7 @@ app.get('/menu', async (req, res) => {
     
             //console.log(`Cliente encontrado: ${result.rows.length}`);
             if (result2.rows.length == 0) {
-                res.render(menu_render, { message: 'Error de Sesión' });
+                res.render(menu_render, { message: 'No hay Cuentas Bancarias Disponible. Por favor, consulte a su Agente!' });
                 return;
             }
             datos2 = result2.rows[0];

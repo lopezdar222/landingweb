@@ -94,8 +94,10 @@ document.addEventListener('DOMContentLoaded', async (req, res) => {
                 if (data.alerta == 'chat') { 
                   //alert('Actualizar Chats');
                   cargarContenidoChats(id_cliente, '', true);
+                } else {
+                  alert(data.alerta);
                 }
-                // Aquí puedes manipular el mensaje recibido, por ejemplo, mostrarlo en la página
+                alertaSistemaOperativo(data.alerta);
             };
             /******************************************************************/
             // Carga el menú de actividad de clientes al inicio:
@@ -116,6 +118,35 @@ function enviarMensaje(mensaje, id_cliente) {
               alerta : mensaje
   };
   ws.send(JSON.stringify(message));
+}
+
+function alertaSistemaOperativo(alerta) {
+  const titulo = 'Red 365';
+  const icon = '../img/logo.ico';
+  let contenido = '';
+  if (alerta == 'chat') {
+      contenido = 'Nuevo Mensaje de tu Agente'; 
+  } else {
+      contenido = 'El Agente Actualizó el Estado de tu Solicitud'; 
+  }    
+  if (Notification.permission === 'granted') {
+      // El navegador admite notificaciones y ya se ha otorgado permiso
+      new Notification(titulo, {
+          body: contenido,
+          icon: icon
+      });
+  } else if (Notification.permission !== 'denied') {
+      // Solicitar permiso al usuario para mostrar notificaciones
+      Notification.requestPermission().then(function (permission) {
+          if (permission === 'granted') {
+              // Se ha otorgado permiso, mostrar la notificación
+              new Notification(titulo, {
+                  body: contenido,
+                  icon: icon
+              });
+          }
+      });
+  }
 }
 /******************************************************************/
 
@@ -406,6 +437,9 @@ const cargarFichas = async (id_cliente, id_token, id_cuenta_bancaria, minimo_car
           url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
           document.getElementById('modal-contenido').innerHTML = '';
           cargarContenido(url);
+          if (mgsResultado == 'ok') {
+            enviarMensaje('sol_carga_creada', id_cliente);
+          }
         } else {
           cargando_fichas = 0;
           msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
@@ -482,6 +516,9 @@ const retirarFichas = async (id_cliente, id_token, minimo_retiro) => {
           url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
           document.getElementById('modal-contenido').innerHTML = '';
           cargarContenido(url);
+          if (mgsResultado == 'ok') {
+            enviarMensaje('sol_retiro_creada', id_cliente);
+          }
         } else {
           retirando_fichas = 0;
           msgUsuario.innerHTML = 'Disculpas, ha ocurrido un error. Por favor, reintentar la acción.';
