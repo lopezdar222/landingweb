@@ -507,17 +507,20 @@ const retirarFichas = async (id_cliente, id_token, minimo_retiro) => {
                                   solicitud_importe,
                                   solicitud_cbu })
         });
+
         if (response.ok) {
           const data = await response.json();
           mgsResultado = data.resultado;
           mgsResultadoMensaje = data.mensaje;
           //alert(mgsResultadoMensaje);
           retirando_fichas = 0;
-          url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
-          document.getElementById('modal-contenido').innerHTML = '';
-          cargarContenido(url);
           if (mgsResultado == 'ok') {
+            url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
+            document.getElementById('modal-contenido').innerHTML = '';
+            cargarContenido(url);
             enviarMensaje('sol_retiro_creada', id_cliente);
+          } else {
+            msgUsuario.innerHTML = mgsResultadoMensaje;
           }
         } else {
           retirando_fichas = 0;

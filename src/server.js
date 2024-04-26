@@ -172,13 +172,30 @@ app.post('/retirar_fichas', async (req, res) => {
             res.status(201).json({ resultado: 'error', mensaje: 'Error de Sesión' });
             return;
         }
-        const queryAccion = `select * from Registrar_Cliente_Accion(${id_cliente}, 2, '${solicitud_titular}', ${solicitud_importe}, 0, '${solicitud_cbu}', 0)`;
-        const resultAccion = await db.handlerSQL(queryAccion);
-        const cod_oper = resultAccion.rows[0].codigo_operacion;
-        const mensaje = `Solicitud de Retiro Creada! Nro de Operación: ${cod_oper}`;
-        res.status(201).json({ resultado: `ok`, mensaje: mensaje });
+        const datos = resultCheck.rows[0];
+        //res.status(201).json({ resultado: 'error', mensaje: 'Error de Interacción con la Plataforma' });
+        let resultado = '';
+        if (datos.id_plataforma == 1) {
+            const retiro_manual3 = require('./scrap_bot3/retirar.js');
+            resultado = await retiro_manual3(datos.cliente_usuario, String(solicitud_importe), datos.agente_usuario, datos.agente_password);
+        }
+        //console.log(`Resultado carga = ${resultado}`);
+        if (resultado == 'ok')
+        {
+            const queryAccion = `select * from Registrar_Cliente_Accion(${id_cliente}, 2, '${solicitud_titular}', ${solicitud_importe}, 0, '${solicitud_cbu}', 0)`;
+            const resultAccion = await db.handlerSQL(queryAccion);
+            const cod_oper = resultAccion.rows[0].codigo_operacion;
+            const mensaje = `Solicitud de Transferencia Creada! Nro de Operación de Retiro: ${cod_oper}`;
+            res.status(201).json({ codigo: 1 ,resultado: `ok`, mensaje: mensaje });
+        } else if (resultado === 'error') {
+            res.status(500).json({ codigo: 2 , resultado: 'error', mensaje: 'Error al Retirar Fichas' });
+        } else if (resultado === 'en_espera') {
+            res.status(500).json({ codigo: 3 , resultado: 'error', mensaje: 'Servidor con Demora. Por favor, volver a intentar en unos segundos' });
+        } else if (resultado === 'faltante') {
+            res.status(201).json({ codigo: 4 , resultado: 'error', mensaje: 'El Saldo es Insuficiente!' });
+        }
     } catch (error) {
-        res.status(201).json({ resultado: 'error', mensaje: error });
+        res.status(201).json({ codigo: 5 , resultado: 'error', mensaje: error });
     }
 });
 
