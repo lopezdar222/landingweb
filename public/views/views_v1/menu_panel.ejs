@@ -1,0 +1,121 @@
+<%if (message === 'ok') {%> 
+    <h2 class="text-lg font-bold md:text-xl col-span-3 md:col-span-2 flex justify-center items-center text-center"><%= title %> <%= datos.cliente_usuario %></h2>
+    <!--span class="ml-2"><%= title %> <%= datos.cliente_usuario %></span-->
+    <div class="w-full">
+        <button onclick="cargarContenido('/principal?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2"><<-- Volver</span>
+        </button> 
+        
+        <div class="flex flex-col"><div class="w-full my-3 2xl:mt-6 flex flex-col items-center">
+            <div class="grid grid-cols-3 lg:flex items-center text-xs lg:text-sm rounded-lg font-bold bg-custom-violet">
+                <button class="py-2 px-4 lg:px-6 lg:py-2 rounded-lg bg-custom-yellow text-custom-dark-violet-2">Todas</button>
+                <button class="py-2 px-4 lg:px-6 lg:py-2 rounded-lg ">Cargas</button>
+                <button class="py-2 px-4 lg:px-6 lg:py-2 rounded-lg ">Retiros</button>
+            </div>
+            <div class="flex flex-col 2xl:flex-row mt-6 ">
+                <div class="grid grid-cols-3 lg:flex items-center text-xs lg:text-sm rounded-lg font-bold bg-custom-violet">
+                    <button class="py-2 px-4 lg:px-6 lg:py-2 rounded-lg bg-custom-yellow text-custom-dark-violet-2">Todas</button>
+                    <button class="py-2 px-4 lg:px-6 lg:py-2 rounded-lg ">Pendientes</button>
+                    <button class="py-2 px-4 lg:px-6 lg:py-2 rounded-lg ">Aceptadas</button>
+                    <button class="py-2 px-4 lg:px-6 lg:py-2 rounded-lg ">Rechazadas</button>
+                </div>
+            </div>
+        </div>
+        <table class="mt-4 w-full">
+            <thead class="hidden xl:block">
+                <tr class="flex text-left text-md font-bold bg-custom-violet rounded-lg mb-2 p-4 items-center relative">
+                    <th class="flex w-[90px]">Operación</th>
+                    <th class="w-[140px] flex">Fecha y Hora</th>
+                    <th class="w-[110px] flex">Importe</th>
+                    <th class="w-[80px]">Tipo</th>
+                    <th class="w-[200px]">Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% datos2.forEach(function(dato2) { %>
+                    <tr class="flex flex-col xl:flex-row text-sm xl:font-medium mb-2 rounded-lg px-3 py-2 items-center bg-custom-violet">
+                        <td class="mb-2 xl:mb-0 xl:w-[90px]"><%= dato2.codigo_operacion %></td>
+                        <td class="mb-2 xl:mb-0 xl:w-[140px]"><%= dato2.fecha_hora_operacion %></td>
+                        <% if (dato2.id_accion == 1) { %>
+                            <td class="mb-2 xl:mb-0 xl:w-[110px]">$&nbsp;<%= dato2.carga_importe %>
+                            <% if (dato2.carga_bono > 0) { %>
+                                &nbsp;(Bono: $&nbsp;<%= dato2.carga_bono %>)
+                            <% } %></td>
+                        <% } else if (dato2.id_accion == 2) { %>
+                            <td class="mb-2 xl:mb-0 xl:w-[110px]">$&nbsp;<%= dato2.retiro_importe %></td>
+                        <% } else { %>
+                            <td class="mb-2 xl:mb-0 xl:w-[110px]"> - </td>
+                        <% } %>
+                        <td class="mb-2 xl:mb-0 xl:w-[80px]"><%= dato2.accion %></td>
+                        <% if (dato2.id_estado == 1) { %>
+                            <td class="mb-2 xl:mb-0 xl:w-[200px] flex">
+                                <div class="bg-custom-yellow rounded-lg text-custom-dark-violet-2 w-[100px] text-center font-bold py-2 text-sm"><%= dato2.estado %></div>
+                            </td>
+                        <% } else if (dato2.id_estado == 2) { %>
+                            <td class="mb-2 xl:mb-0 xl:w-[200px] flex">
+                                <div class="bg-custom-green rounded-lg text-custom-dark-violet-2 w-[100px] text-center font-bold py-2 text-sm"><%= dato2.estado %></div>
+                            </td>
+                        <% } else if (dato2.id_estado == 3) { %>
+                            <td class="mb-2 xl:mb-0 xl:w-[200px] flex">
+                                <div class="bg-custom-red rounded-lg text-custom-dark-violet-2 w-[100px] text-center font-bold py-2 text-sm"><%= dato2.estado %></div>
+                            </td>
+                        <% } else { %>
+                            <td class="mb-2 xl:mb-0 xl:w-[200px] flex"> <%= dato2.estado %> </td>
+                        <% } %>
+                    </tr>
+                <% }); %>
+                <!--tr class="flex flex-col xl:flex-row text-sm xl:font-medium mb-2 rounded-lg px-3 py-2 items-center bg-custom-violet">
+                    <td class="mb-2 xl:mb-0 xl:w-[90px]">4063</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[140px]">10-04-2024 23:17</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[110px]">$&nbsp;10.000,00</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[80px]">Carga</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[200px] flex">
+                        <div class="bg-custom-yellow rounded-lg text-custom-dark-violet-2 w-[100px] text-center font-bold py-2 text-sm">Pendiente</div>
+                    </td>
+                </tr>
+                <tr class="flex flex-col xl:flex-row text-sm xl:font-medium mb-2 rounded-lg px-3 py-2 items-center bg-custom-violet">
+                    <td class="mb-2 xl:mb-0 xl:w-[90px]">4063</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[140px]">10-04-2024 23:17</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[110px]">$&nbsp;10.000,00</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[80px]">Carga</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[200px] flex">
+                        <div class="bg-custom-red rounded-lg text-custom-dark-violet-2 w-[100px] text-center font-bold py-2 text-sm">Rechazada</div>
+                        <button title="Propina: $250" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition  relative bg-custom-yellow hover:bg-custom-dark-yellow active:bg-custom-yellow text-custom-dark-violet-2 w-[35px] ml-2">$ </button>
+                    </td>
+                </tr>
+                <tr class="flex flex-col xl:flex-row text-sm xl:font-medium mb-2 rounded-lg px-3 py-2 items-center bg-custom-violet">
+                    <td class="mb-2 xl:mb-0 xl:w-[90px]">2915</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[140px]">03-04-2024 23:17</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[110px]">$&nbsp;10.000,00</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[80px]"> Carga</td>
+                    <td class="mb-2 xl:mb-0 xl:w-[200px] flex"><div class="bg-custom-green rounded-lg text-custom-dark-violet-2 w-[100px] text-center font-bold py-2 text-sm">Aceptada</div></td>
+                </tr-->
+            </tbody>
+        </table>
+
+        <%if (datos.contacto_whatsapp != '') {%>
+        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <a href="https://wa.me/<%= datos.contacto_whatsapp %>" target="_blank">
+                <span class="ml-2">Contacto Whatsapp</span>
+            </a>
+        </button>
+        <%} %>
+        <%if (datos.contacto_telegram != '') {%>
+        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <a href="https://<%= datos.contacto_telegram %>" target="_blank">
+                <span class="ml-2">Contacto Telegram</span>
+            </a>
+        </button>
+        <%} %>
+        <button onclick="cerrar_Sesion(<%= datos.id_cliente %>, '<%= id_token %>');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+            <span class="ml-2">Cerrar Sesión</span>
+        </button>
+    </div>
+    <%} else { %>
+        <span class="ml-2"><%= message %> </span>
+        <div class="w-full">
+            <button onclick="cerrar_Sesion_Token_Invalido()" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
+                <span class="ml-2"><<-- Volver al Inicio</span>
+            </button> 
+        </div>    
+    <%}  %>

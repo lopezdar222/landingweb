@@ -1,17 +1,31 @@
-<%if (resultado == 'ok') {%>
-    <div class="w-full">
-        <div class="flex flex-col items-center py-8 text-center md:px-12">
-            <p class="my-8 text-xs md:text-sm leading-5"><%= mensaje %></p>
-            <button onclick="cargarContenido('/principal?id_cliente=<%= id_cliente %>&id_token=<%= id_token %>');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition px-3 md:px-5 py-2 md:py-3 relative bg-custom-light-violet hover:bg-violet-600 hover:text-gray-200 text-white w-full">
-                Volver al inicio 
-            </button>
+<main data-bs-theme="dark">
+    <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-1 g-3">
+                <div class="col">
+                <%if (message === 'ok') {%>
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <button onclick="cargarContenidoGeneral('/principal?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>');">
+                                <span class="ml-2">Volver al inicio </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card shadow-sm">
+                        <p class="card-text"><%= mensaje %> </p>
+                    </div>
+                <%} else {%>
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <p class="card-text"><%= message %> </p>
+                            <button onclick="cerrar_Sesion_Token_Invalido()">
+                                <span class="ml-2"><<-- Volver al Inicio</span>
+                            </button>
+                        </div>
+                    </div>
+                <%}  %>
+                </div>
+            </div>
         </div>
     </div>
-<%} else { %>
-    <span class="ml-2"><%= mensaje %> </span>
-    <div class="w-full">
-        <button onclick="cerrar_Sesion_Token_Invalido()" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2"><<-- Volver al Inicio</span>
-        </button> 
-    </div>    
-<%}  %>
+</main>

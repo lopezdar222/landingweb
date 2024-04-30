@@ -1,63 +1,145 @@
 <%if (message === 'ok') {%>
-    <div class="w-full">			
-        <div class="mb-4 text-center text-sm">
-            <!--p class="text-custom-yellow font-bold"><%= title %> <%= datos.cliente_usuario %></p-->
-            <h2 class="text-lg font-bold md:text-xl col-span-3 md:col-span-2 flex justify-center items-center text-center"><%= title %> <%= datos.cliente_usuario %></h2>
-            <!--span class="ml-2"><%= title %> <%= datos.cliente_usuario %></span-->
-        </div>	
-        <div class="game">
-            <div class="slots">
-                <div class="reel"></div>
-                <div class="reel"></div>
-                <div class="reel"></div>
-            </div>
+    <nav class="py-2 bg-body-tertiary border-bottom" data-bs-theme="dark">
+        <div class="container d-flex flex-wrap">
+            <ul class="nav me-auto">
+                <div class="col-md-4 d-flex align-items-center">
+                    <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                        <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+                    </a>
+                </div>
+            </ul>
+            <ul class="nav">
+                <li class="nav-item">
+                    <span class="ml-2"><%= datos.cliente_usuario %></span>
+                </li>
+                <li class="nav-item">
+                    <button onclick="cerrar_Sesion(<%= datos.id_cliente %>, '<%= id_token %>');">
+                        <span class="ml-2">Cerrar Sesion</span>
+                    </button>
+                </li>
+            </ul>
         </div>
-        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <a class="w-full mb-3" href="<%= datos.url_juegos %>">
-                <span class="ml-2">Jugá...</span>
+    </nav>
+    <header class="py-3 mb-4 border-bottom" data-bs-theme="dark">
+        <div class="container d-flex flex-wrap justify-content-center">
+            <a href="<%= datos.url_juegos %>"
+                class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto link-body-emphasis text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+                <span class="fs-4">Jugar</span>
             </a>
-        </button>
-        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=cargar_fichas');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2">Cargar Fichas</span>
-        </button>
-        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=retirar_fichas');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2">Retirar Fichas</span>
-        </button>
-        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=panel');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2">Panel de Solicitudes</span>
-        </button>
-        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=cambiar_contraseña');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2">Cambiar Contraseña</span>
-        </button>
-        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=desbloquear_usuario');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2">Desbloquear Usuario</span>
-        </button>
-        <button onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=chat');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2">Chatear con tu Agente</span>
-        </button>
-        <%if (datos.contacto_whatsapp != '') {%>
-        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <a href="https://wa.me/<%= datos.contacto_whatsapp %>" target="_blank">
-                <span class="ml-2">Contacto Whatsapp</span>
-            </a>
-        </button>
-        <%} %>
-        <%if (datos.contacto_telegram != '') {%>
-        <button class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative	bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <a href="https://<%= datos.contacto_telegram %>" target="_blank">
-                <span class="ml-2">Contacto Telegram</span>
-            </a>
-        </button>
-        <%} %>
-        <button onclick="cerrar_Sesion(<%= datos.id_cliente %>, '<%= id_token %>');" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2">Cerrar Sesión</span>
-        </button>
-    </div>
+            <!--form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
+                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+            </form-->
+        </div>
+    </header>
+    <div id="contenido-dinamico"> 
+        <main data-bs-theme="dark">
+            <!--section class="py-5 text-center container">
+                <div class="row py-lg-5">
+                    <div class="col-lg-6 col-md-8 mx-auto">
+                        <h1 class="fw-light">Album example</h1>
+                        <p class="lead text-body-secondary">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+                        <p>
+                            <a href="#" class="btn btn-primary my-2">Main call to action</a>
+                            <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+                        </p>
+                    </div>
+                </div>
+            </section-->
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+                        <div class="col">
+                            <div type="button" class="card shadow-sm" 
+                                onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=cargar_fichas');">
+                                <!--svg class="bd-placeholder-img card-img-top" width="50%" height="112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">icono o img</text></svg-->
+                                <div class="card-body">
+                                    <p class="card-text">Cargar fichas</p>
+                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div type="button" class="card shadow-sm"
+                            onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=retirar_fichas');">
+                                <!--svg class="bd-placeholder-img card-img-top" width="50%" height="112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">icono o img</text></svg-->
+                                <div class="card-body">
+                                    <p class="card-text">Retirar Fichas</p>
+                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div  type="button" class="card shadow-sm"
+                                onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=panel');">
+                                <!--svg class="bd-placeholder-img card-img-top" width="50%" height="112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">icono o img</text></svg-->
+                                <div class="card-body">
+                                    <p class="card-text">Solicitudes</p>
+                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div  type="button" class="card shadow-sm"
+                                onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=chat');">
+                                <!--svg class="bd-placeholder-img card-img-top" width="50%" height="112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">icono o img</text></svg-->
+                                <div class="card-body">
+                                    <p class="card-text">Chatear con el Agente</p>
+                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div  type="button" class="card shadow-sm"
+                                onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=cambiar_contraseña');">
+                                <!--svg class="bd-placeholder-img card-img-top" width="50%" height="112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">icono o img</text></svg-->
+                                <div class="card-body">
+                                    <p class="card-text">Cambiar contraseña</p>
+                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div  type="button" class="card shadow-sm"
+                                onclick="cargarContenido('/menu?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>&menu=desbloquear_usuario');">
+                                <!--svg class="bd-placeholder-img card-img-top" width="50%" height="112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">icono o img</text></svg-->
+                                <div class="card-body">
+                                    <p class="card-text">Desbloquear Usuario</p>
+                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div  type="button" class="card shadow-sm">
+                                <!--svg class="bd-placeholder-img card-img-top" width="50%" height="112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">icono o img</text></svg-->
+                                <div class="card-body">
+                                    <p class="card-text">Copiar Link Referidos</p>
+                                    <div class="d-flex justify-content-between align-items-center"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div> 
 <%} else {%>
-    <span class="ml-2"><%= message %> </span>
-    <div class="w-full">
-        <button onclick="cerrar_Sesion_Token_Invalido()" class="rounded-lg text-xs md:text-sm font-bold flex justify-center items-center disabled:opacity-40 transition py-4 relative bg-custom-violet hover:text-gray-300 border border-custom-violet hover:border-custom-yellow w-full mb-3">
-            <span class="ml-2"><<-- Volver al Inicio</span>
-        </button> 
-    </div>    
+    <nav class="py-2 bg-body-tertiary border-bottom" data-bs-theme="dark">
+        <div class="container d-flex flex-wrap">
+            <ul class="nav me-auto">
+                <div class="col-md-4 d-flex align-items-center">
+                    <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                        <svg class="bi" width="30" height="24"><use xlink:href="#bootstrap"/></svg>
+                    </a>
+                </div>
+            </ul>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a onclick="cerrar_Sesion_Token_Invalido();" 
+                        class="nav-link link-body-emphasis px-2"><%= message %></a>
+                </li>
+                <!--li class="nav-item"><a href="#" class="nav-link link-body-emphasis px-2">Sign up</a></li-->
+            </ul>
+        </div>
+    </nav>    
 <%} %>
