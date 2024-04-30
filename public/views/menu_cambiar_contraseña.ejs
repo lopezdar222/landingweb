@@ -1,7 +1,7 @@
 <main data-bs-theme="dark"> 
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-1 g-3">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
                 <%if (message === 'ok') {%>
                     <div class="card shadow-sm">
@@ -34,7 +34,7 @@
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
                                 <button onclick="cambiarContraseña(<%=datos.id_cliente%>, '<%=id_token%>');">
-                                    <span class="ml-2">Enviar Solicitud</span>
+                                    <span class="ml-2">Confirmar</span>
                                 </button>
                             </div>
                         </div>

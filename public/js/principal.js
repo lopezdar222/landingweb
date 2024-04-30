@@ -215,7 +215,7 @@ const cambiarContraseña = async (id_cliente, id_token) => {
           //alert(mgsResultadoMensaje);
           cambiando_contraseña = 0;
           url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
-          document.getElementById('modal-contenido').innerHTML = '';
+          //document.getElementById('modal-contenido').innerHTML = '';
           cargarContenido(url);
         } else {
           cambiando_contraseña = 0;
@@ -324,7 +324,7 @@ const cargarFichas = async (id_cliente, id_token, id_cuenta_bancaria, minimo_car
           //alert(mgsResultadoMensaje);
           cargando_fichas = 0;
           url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
-          document.getElementById('modal-contenido').innerHTML = '';
+          //document.getElementById('modal-contenido').innerHTML = '';
           cargarContenido(url);
           if (mgsResultado == 'ok') {
             enviarMensaje('sol_carga_creada', id_cliente);
@@ -405,7 +405,7 @@ const retirarFichas = async (id_cliente, id_token, minimo_retiro) => {
           retirando_fichas = 0;
           if (mgsResultado == 'ok') {
             url = `/menu_mensaje?id_cliente=${id_cliente}&id_token=${id_token}&resultado=${mgsResultado}&mensaje=${mgsResultadoMensaje}`;
-            document.getElementById('modal-contenido').innerHTML = '';
+            //document.getElementById('modal-contenido').innerHTML = '';
             cargarContenido(url);
             enviarMensaje('sol_retiro_creada', id_cliente);
           } else {
