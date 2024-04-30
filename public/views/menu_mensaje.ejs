@@ -3,10 +3,10 @@
         <div class="container">
             <div class="row row-cols-3 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col">
-                <%if (message === 'ok') {%>
+                <%if (resultado === 'ok') {%>
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <button onclick="cargarContenidoGeneral('/principal?id_cliente=<%= datos.id_cliente %>&id_token=<%= id_token %>');">
+                            <button onclick="cargarContenidoGeneral('/principal?id_cliente=<%= id_cliente %>&id_token=<%= id_token %>');">
                                 <span class="ml-2">Volver al inicio </span>
                             </button>
                         </div>
@@ -17,7 +17,7 @@
                 <%} else {%>
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <p class="card-text"><%= message %> </p>
+                            <p class="card-text"><%= mensaje %> </p>
                             <button onclick="cerrar_Sesion_Token_Invalido()">
                                 <span class="ml-2"><<-- Volver al Inicio</span>
                             </button>
