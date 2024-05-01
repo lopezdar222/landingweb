@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const db = require(__dirname + '/db');
 const ejs = require('ejs');
 const axios = require('axios');
+const multer  = require('multer');
 ///////////////////////////////////////////////////////////////////////////////
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -295,6 +296,8 @@ app.get('/menu_chat_detalle', async (req, res) => {
         let query = `select id_cliente_chat,` +
                                 `id_cliente, ` +
                                 `mensaje, ` +
+                                `nombre_original, ` +
+                                `nombre_guardado, ` +
                                 `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') as fecha_mensaje,` +
                                 `TO_CHAR(fecha_hora_creacion, 'HH24:MI') as horario_mensaje, ` +
                                 `enviado_cliente, ` +
@@ -303,7 +306,7 @@ app.get('/menu_chat_detalle', async (req, res) => {
                                 `id_usuario, ` +
                                 `usuario, ` +
                                 `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') = LAG(TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY')) ` +
-                                `OVER (ORDER BY id_cliente_chat) AS misma_fecha `;
+                                `OVER (ORDER BY fecha_hora_creacion) AS misma_fecha `;
         
         if (mensaje_cliente == '') {        
             query = query + `from Obtener_Cliente_Chat(${id_cliente}, true);`;
@@ -436,6 +439,8 @@ app.get('/menu', async (req, res) => {
             query2 = `select id_cliente_chat,` +
                                 `id_cliente, ` +
                                 `mensaje, ` +
+                                `nombre_original, ` +
+                                `nombre_guardado, ` +
                                 `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') as fecha_mensaje,` +
                                 `TO_CHAR(fecha_hora_creacion, 'HH24:MI') as horario_mensaje, ` +
                                 `enviado_cliente, ` +
@@ -444,7 +449,7 @@ app.get('/menu', async (req, res) => {
                                 `id_usuario, ` +
                                 `usuario, ` +
                                 `TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY') = LAG(TO_CHAR(fecha_hora_creacion, 'DD/MM/YYYY')) ` +
-                                `OVER (ORDER BY id_cliente_chat) AS misma_fecha ` +
+                                `OVER (ORDER BY fecha_hora_creacion) AS misma_fecha ` +
                         `from Obtener_Cliente_Chat(${id_cliente}, true);`;
 
             result2 = await db.handlerSQL(query2);
@@ -515,4 +520,59 @@ function generarToken(length) {
       token += caracteres.charAt(indice);
     }
     return token;
-  }
+}
+
+/*Archivos Adjuntos*/
+// Configuración de multer para la gestión de archivos
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/') // Ruta donde se almacenarán los archivos
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname) // Nombre del archivo almacenado en el servidor
+    }
+})
+  
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 20 * 1024 * 1024 // Límite de 20MB
+    },
+    fileFilter: function (req, file, cb) {
+        const extname = path.extname(file.originalname).toLowerCase();
+        if (extname === '.jpg' || extname === '.png' || extname === '.pdf') {
+            cb(null, true);
+        } else {
+            cb(new Error('Solo se permiten archivos .jpg, .png o .pdf'));
+        }
+}
+});
+  
+// Ruta para subir un archivo
+app.post('/upload', upload.single('file'), async (req, res) => {
+    const id_cliente = req.body.id_cliente;
+    const nombre_guardado = req.body.nombre_guardado;
+    const nombre_original = req.body.nombre_original;
+    
+    //console.log(`Cliente: ${id_cliente} - Archivo ${nombre_original} - Guardado como ${nombre_guardado}`);
+    const query= `select Insertar_Cliente_Chat_Adjunto(${id_cliente}, true, '${nombre_original}', '${nombre_guardado}', 1)`;
+    await db.handlerSQL(query);
+    res.status(201).json({ resultado: 'ok', mensaje: 'Archivo enviado exitosamente' });
+});
+  
+// Manejador de errores
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        res.status(400).send('Error al subir archivo: ' + err.message);
+    }
+});
+
+// Directorio donde se encuentran los archivos a servir
+const directorioArchivos = path.join(__dirname, '../uploads/');
+
+// Endpoint para servir archivos
+app.get('/descargar/:nombreArchivo', (req, res) => {
+  const nombreArchivo = req.params.nombreArchivo;
+  const rutaArchivo = path.join(directorioArchivos, nombreArchivo);
+  res.download(rutaArchivo);
+});
