@@ -1,7 +1,29 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => { 
     const loginForm = document.getElementById('loginform');
     const messageDiv = document.getElementById('message');
     let iniciando_sesion = 0;
+    //toggle
+    const select = document.querySelector('#select');
+    const opciones = document.querySelector('#opciones');
+    const contenidoSelect = document.querySelector('#select .contenido-select');
+    const hiddenInput = document.querySelector('#inputSelect');
+
+    //toggle
+    document.querySelectorAll('#opciones > .opcion').forEach((opcion) => {
+        opcion.addEventListener('click', (e) => {
+            e.preventDefault();
+            contenidoSelect.innerHTML = e.currentTarget.innerHTML;
+            select.classList.toggle('active');
+            opciones.classList.toggle('active');
+            hiddenInput.value = e.currentTarget.querySelector('.titulo').innerText;
+        });
+    });
+
+    //toggle
+    select.addEventListener('click', () => {
+        select.classList.toggle('active');
+        opciones.classList.toggle('active');
+    })
 
     // Manejar el inicio de sesión
     loginForm.addEventListener('submit', async (event) => {
@@ -55,4 +77,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function showMessage(message) {
         messageDiv.textContent = message;
     }
+
 });
+
+
+

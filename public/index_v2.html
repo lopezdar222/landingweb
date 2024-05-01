@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="./css/styles.css">
+    <link rel="preload" as="image" href="./img/logo-img.png"/>
+    <link rel="icon" href="./img/logo.ico"/>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css"> 
+    <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <title>365_Online</title>
+    <meta name="robots" content="noindex"/>
+    <meta name="next-size-adjust"/>
+  </head> 
+
+  <body class= "login">
+    <img src="./img/6.svg" class="back-img">
+      <!--video autoplay muted loop class="video" id="myVideo">
+        <source src="././video/fondo_vacio.mp4" type="video/mp4">
+      </video-->
+
+   <div class="containers">
+    <img src="./img/logo-img.png" alt="365_online" class="logo-img">
+
+     <form novalidate id="loginform">
+       <!--h1 class="h3 mb-3 fw-normal">please sign in</h1-->
+
+
+
+       <div class="user-pass-drop">
+
+        <div class="con-tenedor">
+          <form action="">
+            <div class="select-box">
+
+              <div class="select" id="select">
+                <div class="contenido-select">
+                  <p class="titulo"> Elegí tu página de juegos<i class="bi bi-caret-down-fill"></i></p>
+                </div>
+              </div>
+
+              <div class="opciones" id="opciones">
+
+                <a href="#" class="opcion">
+                  <div class="contenido-opcion">
+                    <!--img src="" alt=""-->
+                    <div class="textos">
+                      <p class="titulo"><i class="bi bi-globe2"></i> casino365online.co </p>
+                    </div>
+                  </div>
+                </a>
+
+                <a href="#" class="opcion">
+                  <div class="contenido-opcion">
+                    <!--img src="" alt=""-->
+                    <div class="textos">
+                      <p class="titulo"><i class="bi bi-globe2"></i> casino365online.club </p>
+                    </div>
+                  </div>
+                </a>
+
+                <a href="#" class="opcion">
+                  <div class="contenido-opcion">
+                    <!--img src="" alt=""-->
+                    <div class="textos">
+                      <p class="titulo"><i class="bi bi-globe2"></i> casinoonline365.com </p>
+                    </div>
+                  </div>
+                </a>
+
+
+              </div>
+            </div>
+
+            <input type="hidden" name="casino" id="inputSelect" value="">
+          </form>
+        </div>
+
+
+
+
+        <!--div class="dropdownmenu">
+          <ul>
+
+            <li><a href="" class="desplegable"> Elegí tu página de juegos <span style="font-size: 17px; /*color: yellow;*/ "><i class="bi bi-caret-down-fill"></i></span></a>
+              <ul id="submenu" class="submenu">
+                <li><a href="https://casino365online.co"><span style="font-size: 19px; /*color: yellow;*/ "><i class="bi bi-globe2"></i></span> casino365online </a></li>
+                <hr class="solid">
+                <li><a href=""><span style="font-size: 19px; /*color: yellow;*/ "><i class="bi bi-globe2"></i></span> Pagina-2 </a></li>
+              </ul> 
+            </li>
+          </ul>
+        </div-->
+
+
+         <input type="text" name="username" id="loginusername" placeholder="Ingresa tu usuario">
+         <!--label for="floatinginput">email address</label-->
+         <input type="password" name="password" id="loginpassword" placeholder="Contraseña">
+         <!--label for="floatingpassword">password</label-->
+
+         <button class="boton" type="submit">Ingresar</button>
+       </div>
+
+       <!--div class="form-check text-start my-3">
+         <input class="form-check-input" type="checkbox" value="remember-me" id="flexcheckdefault">
+         <label class="form-check-label" for="flexcheckdefault">
+           remember me
+         </label>
+       </div-->
+       
+       <!--p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p-->
+     </form>
+     <div class="error" id="message"></div>
+   </div>
+
+
+    <script src="../public/js/index.js"></script>
+    <script src="../public/js/form-validation.js"></script>
+
+    <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="././node_modules/'@popperjs'/core/dist/umd/popper.min.js"></script>
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

@@ -75,6 +75,10 @@ html {
     font-size: 17px;
 }
 
+header {
+    width: 100%;
+}
+
 input {
     background: transparent;
     color: var(--color-Lavender);
@@ -162,12 +166,12 @@ b {
     border: 0.2px solid #E6E6FA;
     border-radius: 0.25em;
     padding: 11px 0px;
-    margin-top: 23px;
-    margin-bottom: .1px;
+    margin-top: -68px;
+    margin-bottom: 23px;
     cursor: pointer;
     font-size: 17px;
     text-transform: uppercase;
-    width: 100%;
+    width: 40%;
     letter-spacing: 1px;
     transition: .1s;
     overflow: hidden;
@@ -288,7 +292,7 @@ b {
 
 
 .container {
-  max-width: 960px;
+  width: 100%;
 }
 
 .icon-link > .bi {

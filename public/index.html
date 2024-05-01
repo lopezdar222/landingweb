@@ -1,6 +1,5 @@
-<!doctype html> 
+<!doctype html>  
 <html lang="es">
-
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,20 +14,69 @@
   </head>
 
   <body class= "login">
+    <img src="./img/6.svg" class="back-img">
+    <!--video autoplay muted loop class="video" id="myVideo">
+      <source src="././video/fondo_vacio.mp4" type="video/mp4">
+    </video-->
    <div class="containers">
+    <img src="./img/logo-img.png" alt="365_online" class="logo-img">
     
      <form novalidate id="loginform">
-      <video autoplay muted loop class="video" id="myVideo">
-        <source src="././video/fondo_vacio.mp4" type="video/mp4">
-      </video>
-       <img src="../img/logo-img.png" alt="365_online">
-       <!--h1 class="h3 mb-3 fw-normal">please sign in</h1-->
+      <!--h1 class="h3 mb-3 fw-normal">please sign in</h1-->
+       <div class="user-pass-drop">
 
-       <div class="user-pass">
-         <input type="text" name="username" id="username" placeholder="Ingresa tu usuario">
-         <!--label for="floatinginput">email address</label-->
-         <input type="password" name="password" id="password" placeholder="Contraseña">
-         <!--label for="floatingpassword">password</label-->
+        <div class="con-tenedor">
+          <form action="">
+            <div class="select-box">
+
+              <div class="select" id="select">
+                <div class="contenido-select">
+                  <p class="titulo"> Elegí tu página de juegos<i class="bi bi-caret-down-fill"></i></p>
+                </div>
+              </div>
+
+              <div class="opciones" id="opciones">
+
+                <a href="#" class="opcion">
+                  <div class="contenido-opcion">
+                    <!--img src="" alt=""-->
+                    <div class="textos">
+                      <p class="titulo"><i class="bi bi-globe2"></i> casino365online.co </p>
+                    </div>
+                  </div>
+                </a>
+
+                <a href="#" class="opcion">
+                  <div class="contenido-opcion">
+                    <!--img src="" alt=""-->
+                    <div class="textos">
+                      <p class="titulo"><i class="bi bi-globe2"></i> casino365online.club </p>
+                    </div>
+                  </div>
+                </a>
+
+                <a href="#" class="opcion">
+                  <div class="contenido-opcion">
+                    <!--img src="" alt=""-->
+                    <div class="textos">
+                      <p class="titulo"><i class="bi bi-globe2"></i> casinoonline365.com </p>
+                    </div>
+                  </div>
+                </a>
+
+
+              </div>
+            </div>
+
+            <input type="hidden" name="casino" id="inputSelect" value="">
+          </form>
+        </div>
+
+        <input type="text" name="username" id="username" placeholder="Ingresa tu usuario">
+        <!--label for="floatinginput">email address</label-->
+        <input type="password" name="password" id="password" placeholder="Contraseña">
+        <!--label for="floatingpassword">password</label-->
+        <button class="boton" type="submit">Ingresar</button>
        </div>
 
        <!--div class="form-check text-start my-3">
@@ -37,13 +85,13 @@
            remember me
          </label>
        </div-->
-       <button class="boton" type="submit">Ingresar</button>
        <!--p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p-->
      </form>
      <div class="error" id="message"></div>
    </div>
 
     <script src="./js/index.js"></script>
+    <!--script src="./js/form-validation.js"></script-->
     <script type="text/html" src="./node_modules/jquery/dist/jquery.min.js"></script>
     <script type="text/html" src="./node_modules/'@popperjs'/core/dist/umd/popper.min.js"></script>
     <script type="text/html" src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>

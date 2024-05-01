@@ -505,7 +505,7 @@ function mostrarNombreAdjunto() {
 function limpiarAdjunto() {
   const fileInput = document.getElementById('file-input');
   const fileName = document.getElementById('nombre_archivo');
-  fileName.value = null;
+  fileInput.value = null;
   fileName.textContent = '';
 }
 
